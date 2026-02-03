@@ -4,173 +4,24 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>#OYUNUMADOKUNMA</title>
-
-<!-- Google Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
-
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Montserrat',sans-serif}
-
-body{
-  min-height:100vh;
-  background:linear-gradient(120deg,#7f00ff,#e100ff);
-  color:white;
-  overflow-x:hidden;
-}
-
-.bg{
-  position:fixed; inset:0;
-  background:
-    radial-gradient(circle at 20% 20%,rgba(255,255,255,.15),transparent 40%),
-    radial-gradient(circle at 80% 70%,rgba(255,255,255,.12),transparent 40%);
-  animation:bgMove 12s infinite alternate;
-  z-index:-1;
-}
-@keyframes bgMove{to{transform:scale(1.1)}}
-
-header{text-align:center;padding:80px 20px 20px;animation:fadeDown 1.2s}
-header h1{font-size:clamp(2.5rem,6vw,4.5rem);font-weight:900}
-header p{margin-top:15px;font-size:1.2rem;opacity:.9}
-
-.counter{
-  text-align:center;
-  margin:30px 0 10px;
-  font-size:1.4rem;
-  font-weight:700;
-  animation:fadeUp 1.2s;
-}
-.counter span{
-  font-size:2.4rem;
-  display:block;
-  margin-top:10px;
-  transition: all 0.5s ease;
-}
-
-.platforms{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:25px;
-  padding:40px 10%;
-}
-
-.card{
-  background:rgba(255,255,255,.15);
-  backdrop-filter:blur(12px);
-  border-radius:20px;
-  padding:35px 20px;
-  text-align:center;
-  font-size:1.2rem;
-  font-weight:700;
-  animation:fadeInUp 1s ease forwards;
-  transition:transform .4s, background .4s;
-  opacity:0;
-}
-.card:hover{
-  transform:translateY(-12px) scale(1.05);
-  background:rgba(255,255,255,.25);
-}
-
-/* animasyonlu giriş */
-@keyframes fadeInUp{
-  0%{opacity:0; transform:translateY(20px);}
-  100%{opacity:1; transform:translateY(0);}
-}
-
-.warning{
-  max-width:800px;
-  margin:30px auto;
-  padding:0 20px;
-  text-align:center;
-  font-size:1.1rem;
-  line-height:1.7;
-  animation:fadeUp 1.4s;
-}
-
-.action{
-  display:flex;
-  justify-content:center;
-  margin:30px 0 50px;
-}
-
-button{
-  background:linear-gradient(90deg,#ff512f,#f09819);
-  border:none;
-  padding:18px 45px;
-  font-size:1.2rem;
-  font-weight:700;
-  border-radius:50px;
-  cursor:pointer;
-  color:white;
-  box-shadow:0 15px 40px rgba(0,0,0,.35);
-  transition:.3s;
-  position:relative;
-  overflow:hidden;
-}
-button::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:linear-gradient(120deg,transparent,rgba(255,255,255,.6),transparent);
-  transform:translateX(-100%);
-}
-button:hover::after{animation:shine 1s}
-@keyframes shine{to{transform:translateX(100%)}}
-button:hover{transform:scale(1.08)}
-
-.share{
-  display:none;
-  justify-content:center;
-  gap:15px;
-  animation:fadeUp .8s;
-}
-.share a{
-  background:rgba(255,255,255,.2);
-  padding:12px 18px;
-  border-radius:30px;
-  color:white;
-  text-decoration:none;
-  font-weight:700;
-  transition:.3s;
-}
-.share a:hover{background:rgba(255,255,255,.35)}
-
-footer{text-align:center;padding:25px;opacity:.75;font-size:.9rem}
-
-@keyframes fadeDown{from{opacity:0;transform:translateY(-40px)}}
-@keyframes fadeUp{from{opacity:0;transform:translateY(40px)}}
-</style>
 </head>
-
 <body>
-<div class="bg"></div>
 
-<header>
-  <h1>#OYUNUMADOKUNMA</h1>
-  <p>Dijital oyun platformlarına müdahaleye hayır</p>
-</header>
+<h1>#OYUNUMADOKUNMA</h1>
+<p>Dijital oyun platformlarına müdahaleye hayır</p>
 
-<div class="counter">
-  Toplam Destek
-  <span id="count">0</span>
-</div>
+<h2>Toplam Destek: <span id="count">0</span></h2>
 
-<section class="platforms">
+<div id="platforms">
   <div class="card">STEAM</div>
   <div class="card">EPIC GAMES</div>
   <div class="card">PLAYSTATION STORE</div>
   <div class="card">XBOX STORE</div>
-</section>
-
-<section class="warning">
-  Dijital oyun platformlarına getirilecek kısıtlamalar,
-  milyonlarca oyuncunun erişimini ve dijital özgürlüğünü tehdit ediyor.
-</section>
-
-<div class="action">
-  <button id="supportBtn">DESTEK VER</button>
 </div>
 
-<div class="share" id="shareBox">
+<button id="supportBtn">DESTEK VER</button>
+
+<div id="shareBox" style="display:none;">
   <a id="tw" target="_blank">Twitter</a>
   <a id="wa" target="_blank">WhatsApp</a>
 </div>
@@ -180,8 +31,9 @@ footer{text-align:center;padding:25px;opacity:.75;font-size:.9rem}
 <!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
 <script>
-  // TODO: kendi Firebase projenin bilgilerini buraya ekle
+  // Firebase ayarları
   const firebaseConfig = {
     apiKey: "YOUR_API_KEY",
     authDomain: "YOUR_PROJECT.firebaseapp.com",
@@ -191,7 +43,6 @@ footer{text-align:center;padding:25px;opacity:.75;font-size:.9rem}
     messagingSenderId: "YOUR_SENDER_ID",
     appId: "YOUR_APP_ID"
   };
-
   firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
 
@@ -199,11 +50,10 @@ footer{text-align:center;padding:25px;opacity:.75;font-size:.9rem}
   const btn = document.getElementById("supportBtn");
   const share = document.getElementById("shareBox");
 
-  // Kullanıcı zaten oy verdiyse localStorage ile kontrol
   const destekKey = "destekVerdi";
   let destekVerdi = localStorage.getItem(destekKey);
 
-  // Firebase'den gerçek zamanlı oy sayısını çek
+  // Gerçek zamanlı oy sayısı
   const countRef = db.ref('destekSayisi');
   countRef.on('value', snapshot => {
     let value = snapshot.val() || 0;
@@ -215,7 +65,7 @@ footer{text-align:center;padding:25px;opacity:.75;font-size:.9rem}
     countRef.transaction(current => (current || 0) + 1);
     localStorage.setItem(destekKey, true);
     destekVerdi = true;
-    share.style.display = "flex";
+    share.style.display = "block";
 
     const text = encodeURIComponent("#OYUNUMADOKUNMA – Dijital oyun platformlarına müdahaleye hayır!");
     const url = encodeURIComponent(location.href);
@@ -223,10 +73,24 @@ footer{text-align:center;padding:25px;opacity:.75;font-size:.9rem}
     document.getElementById("wa").href = `https://wa.me/?text=${text}%20${url}`;
   };
 
-  if(destekVerdi) share.style.display = "flex";
+  if(destekVerdi) share.style.display = "block";
+
+  // Basit animasyon: platformları sırayla göstermek
+  const cards = document.querySelectorAll('#platforms .card');
+  cards.forEach((card, i) => {
+    card.style.opacity = 0;
+    card.style.transform = "translateY(20px)";
+    setTimeout(() => {
+      card.style.transition = "opacity 0.5s, transform 0.5s";
+      card.style.opacity = 1;
+      card.style.transform = "translateY(0)";
+    }, i * 300);
+  });
 </script>
+
 </body>
 </html>
+
 
 
 
