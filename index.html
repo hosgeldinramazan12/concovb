@@ -7,93 +7,105 @@
 
 <style>
 body{
-margin:0;
-height:100vh;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-background:linear-gradient(135deg,#001f3f,#003366,#004080);
-font-family:Arial;
-color:#4da6ff;
+  margin:0;
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  background: linear-gradient(135deg,#001f3f,#003366,#004080);
+  font-family: Arial, sans-serif;
+  color:#4da6ff;
+  text-align:center;
 }
 
 h1{
-font-size:45px;
-animation:glow 2s infinite alternate;
+  font-size:50px;
+  animation:glow 2s infinite alternate;
 }
 
 @keyframes glow{
-from{ text-shadow:0 0 10px #0066ff; }
-to{ text-shadow:0 0 30px #66ccff; }
+  from{ text-shadow:0 0 10px #0066ff; }
+  to{ text-shadow:0 0 30px #66ccff; }
 }
 
 #counter{
-font-size:28px;
-margin:20px;
+  font-size:30px;
+  margin:20px;
 }
 
 button{
-padding:18px 40px;
-font-size:20px;
-border:none;
-border-radius:50px;
-background:#0066ff;
-color:white;
-cursor:pointer;
+  padding:18px 40px;
+  font-size:22px;
+  border:none;
+  border-radius:50px;
+  background:#0066ff;
+  color:white;
+  cursor:pointer;
+  transition:0.3s;
+  margin:5px;
 }
+
+button:hover{
+  transform: scale(1.1);
+}
+
+/* Paylaş Butonları */
+.share-buttons{
+  margin-top:30px;
+  display:flex;
+  gap:15px;
+}
+
+.share-buttons a{
+  display:inline-block;
+  padding:15px 25px;
+  border-radius:50px;
+  color:white;
+  text-decoration:none;
+  font-weight:bold;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.share-buttons a:hover{
+  transform: scale(1.2);
+  box-shadow: 0 0 15px #66ccff;
+}
+
+.whatsapp{ background:#25D366; }
+.tiktok{ background:#000; color:#fff; }
+.instagram{ background:#C13584; }
 </style>
 </head>
 <body>
 
 <h1>EMRE'NİN DOĞUM GÜNÜ</h1>
-<div id="counter">Yükleniyor...</div>
-<button onclick="kutla()">Kutlamak İçin Tıkla</button>
+<div id="counter">Toplam Kutlama: 0</div>
+<button id="btn">Kutlamak İçin Tıkla</button>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- Paylaş Butonları -->
+<div class="share-buttons">
+  <a class="whatsapp" href="https://api.whatsapp.com/send?text=Emre'nin Doğum Gününü Kutla! 🎉" target="_blank">WhatsApp</a>
+  <a class="tiktok" href="https://www.tiktok.com/" target="_blank">TikTok</a>
+  <a class="instagram" href="https://www.instagram.com/" target="_blank">Instagram</a>
+</div>
+
 <script>
-const supabase = window.supabase.createClient(
-  "icnydfwcxgpvnaqyvufo",
-  "sb_publishable_gcCuunm8wRFlIrn9ZEh7eg_IeHXaUJg"
-);
+let count = localStorage.getItem('kutlama') || 0;
+document.getElementById('counter').innerText = "Toplam Kutlama: " + count;
 
-async function loadCount(){
-  let { data } = await supabase
-    .from('counter')
-    .select('value')
-    .eq('id',1)
-    .single();
-  document.getElementById("counter").innerText =
-    "Toplam Kutlama: " + data.value;
-}
-
-async function kutla(){
-  if(localStorage.getItem("kutladim")){
-    alert("Zaten kutladın!");
-    return;
-  }
-
-  let { data } = await supabase
-    .from('counter')
-    .select('value')
-    .eq('id',1)
-    .single();
-
-  await supabase
-    .from('counter')
-    .update({ value: data.value + 1 })
-    .eq('id',1);
-
-  localStorage.setItem("kutladim","evet");
-  loadCount();
-}
-
-loadCount();
+document.getElementById('btn').addEventListener('click', function(){
+    if(localStorage.getItem('tiklandi')){
+        alert("Zaten kutladın!");
+        return;
+    }
+    count = parseInt(count) + 1;
+    localStorage.setItem('kutlama', count);
+    localStorage.setItem('tiklandi','evet');
+    document.getElementById('counter').innerText = "Toplam Kutlama: " + count;
+});
 </script>
 
 </body>
 </html>
 
-
-</body>
-</html>
